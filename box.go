@@ -25,7 +25,7 @@ func NewBox(shapesCapacity int) *box {
 // AddShape adds shape to the box
 // returns the error in case it goes out of the shapesCapacity range.
 func (b *box) AddShape(shape Shape) error {
-	if len(b.shapes) > b.shapesCapacity {
+	if len(b.shapes) < b.shapesCapacity {
 		b.shapes = append(b.shapes, shape)
 		return nil
 	}
@@ -35,7 +35,7 @@ func (b *box) AddShape(shape Shape) error {
 // GetByIndex allows getting shape by index
 // whether shape by index doesn't exist or index went out of the range, then it returns an error
 func (b *box) GetByIndex(i int) (Shape, error) {
-	if i > len(b.shapes)-1 {
+	if i >= len(b.shapes) {
 		return nil, errors.New(outOfRangeComplexError)
 	}
 	return b.shapes[i], nil
@@ -44,7 +44,7 @@ func (b *box) GetByIndex(i int) (Shape, error) {
 // ExtractByIndex allows getting shape by index and removes this shape from the list.
 // whether shape by index doesn't exist or index went out of the range, then it returns an error
 func (b *box) ExtractByIndex(i int) (Shape, error) {
-	if i < len(b.shapes)-1 {
+	if i < len(b.shapes) {
 		shape := b.shapes[i]
 		b.shapes = append(b.shapes[:i], b.shapes[i+1:]...)
 		return shape, nil
@@ -55,7 +55,7 @@ func (b *box) ExtractByIndex(i int) (Shape, error) {
 // ReplaceByIndex allows replacing shape by index and returns removed shape.
 // whether shape by index doesn't exist or index went out of the range, then it returns an error
 func (b *box) ReplaceByIndex(i int, shape Shape) (Shape, error) {
-	if i < len(b.shapes)-1 {
+	if i < len(b.shapes) {
 		removedShape := b.shapes[i]
 		b.shapes[i] = shape
 		return removedShape, nil
